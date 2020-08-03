@@ -1,0 +1,255 @@
+# Setup
+
+<!--
+see:
+- https://www.robinwieruch.de/minimal-node-js-babel-setup
+- https://softwarebrothers.co/blog/babel-with-typescript-on-node-js-from-scratch-jscasts-episode-13/
+
+There is an alternative approach with Typescript an ts-jest:
+- https://kulshekhar.github.io/ts-jest/user/babel7-or-ts
+-->
+
+This is the setup of a  Test-Driven Typescript-Node application that can be started with a bash-command.
+
+The NodeJs application builds and starts a React application.
+
+## Initialize 
+
+Initialize the `npm` project with default values
+
+```bash
+npm init -y
+```
+
+Edit it the base data
+
+```json
+{
+  "name": "publishable",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Dr. Frank Zickert",
+  "license": "MIT"
+}
+```
+
+## Project structure
+
+- Add `docs` folder
+- Add `src` folder
+- add `.gitignore`
+
+
+## Add Build Process with Typescript, Babel, and Nodemon
+
+### Babel configuration
+
+
+install the `devDependencies`:
+
+```bash
+npm i -D @babel/core @babel/node nodemon
+
+```
+
+
+we add an `index.js` file to `src`. This is a NodeJs script. This is the only file we use as plain
+Javascript. Because we want to test it right away. We will add features implemented in Typescript once
+we have Typescript setup complete.
+
+in the `package.json`, add a script:
+
+```json
+"scripts": {
+    "start": "nodemon src/index.js"
+},
+```
+
+Run it with `npm start` lets you change the code. Nodemon detects this change and restarts the software.
+
+
+With node, you are able to start your application by running the npm start script.
+The only remaining concern is that you have to start the script every time you want
+to try your source code. You can change this behavior with an always-running node process.
+To remedy this, install the commonly used nodemon library on the command
+line as development dependency to your project.
+
+Of course, we don't want to write everything in plain Javascript.
+
+
+Babel is the Javascript transpiler. It allows us to use latest features of ECMA Script during development
+while the resulting code is compatible with older environments.
+
+change the `start`-script to:
+
+```json
+"scripts": {
+    "start": "nodemon --exec babel-node src/index.js"
+},
+```
+
+Nothing should change when you run the application again,
+though that's just the surface. Under the hood, Babel transpiles your code to vanilla JavaScript.
+When you use an upcoming JavaScript language feature, which hasn't been introduced in Node.js,
+you can still use the feature in your source code. Babel makes sure that Node.js understands it.
+
+Add the required package:
+
+```bash
+npm i -D @babel/preset-env 
+```
+
+TODO: refer to `babel.config.js`.
+
+
+### Typescript configuration
+
+Beyond latest ECMAScript functions, we want to use Typescript.
+
+
+```bash
+npm i -D typescript @babel/preset-typescript
+```
+
+Add the preset to the `babel.config.js`.
+
+Typescript files have a different file extension (`.ts`). In order to tell Babel to look
+for these extensions, we need to install and use: `@babel/register`
+
+```bash
+npm i -D typescript @babel/register
+```
+
+TODO: refer to `babel.config.js` of how to use `@babel/register`
+
+create a simple Typescript file: `dummy.ts`.
+
+```ts
+export const sayHello = () => {
+    console.log("hello world");
+};
+```
+
+When we start the app, we can see that it works. But it does not hot reload changes in the typescript file.
+Nodemon does not detect these changes. It only detects changes in the js-file. But when that changes, it loads
+the new typescript file, too.
+
+see:  {@link https://stackoverflow.com/questions/37979489/how-to-watch-and-reload-ts-node-when-typescript-files-change}
+
+We externalize the `nodemon` configuration into:
+
+```json
+{
+    "watch": ["src"],
+    "ext": ["ts", "js"],
+    "ignore": ["src/**/*.spec.ts"],
+    "exec": "babel-node src/index.js"
+}
+```
+
+If you need to provide further arguments to the `index.js` script, provide it in this configuration file.
+
+change the start script to:
+
+```json
+"scripts": {
+    "start": "nodemon"
+},
+```
+
+Typescript checks the types. How (and how strict) it does it depends on its configuration.
+Add a `tsconfig.json`. 
+
+TODO: link to `tsconfig.json`
+
+### Test
+
+We use Jest.
+
+```bash
+npm install --save-dev jest @types/jest
+```
+
+`@types/jest` lets Typescript know about the types when using jest in a `.spec.ts`. 
+This is helpful when  writing the test cases in typescript.
+
+
+Add the script:
+
+The `-- coverage` option produces an overview of the part of the overall code covered by
+test cases.
+
+```json 
+"scripts": {
+    "test": "jest --config ./jest.config.js --coverage"
+}
+```
+
+And add the `jest.config.js`:
+
+Again, we use the Javascript version to configure our tool so that we can 
+use Publishable.
+
+TODO: refer to `jest.config.js`
+
+We implement a first test case in a test suite in this new file:
+
+TODO: refer to `output.spec.ts`
+
+Last but not least, add another npm script for watching your Jest tests.
+By using this command, you can have your tests running continuously in one command line tab,
+while you start your application in another command line tab.
+
+Every time you change source code while developing your application, 
+your tests will run again with this watch script.
+
+```json
+"scripts": {
+    test:watch": "npm run test -- --watch"
+}
+```
+
+It calls the `test` script and adds the `--watch` flag.
+
+
+## ToDos
+
+Build: explain and use rimraf
+TODO: how to run in production {@link https://softwarebrothers.co/blog/babel-with-typescript-on-node-js-from-scratch-jscasts-episode-13/}
+
+
+
+ @babel/plugin-proposal-object-rest-spread @babel/preset-env
+    "@mdx-js/loader": "^1.6.6",
+    "@storybook/react": "^5.3.19",
+    "@types/jest": "^26.0.4",
+    "@types/node": "^14.0.22",
+    "@types/react": "^16.9.43",
+    "@types/react-dom": "^16.9.8",
+    "@types/styled-components": "^5.1.1",
+    "babel-loader": "^8.1.0",
+    "babel-plugin-wildcard": "^6.0.0",
+    "css-loader": "^3.6.0",
+    "enzyme": "^3.11.0",
+    "html-webpack-plugin": "^4.3.0",
+    "jsdoc": "^3.6.4",
+    "jsdoc-json": "^2.0.2",
+    "json-loader": "^0.5.7",
+    "mini-css-extract-plugin": "^0.9.0",
+    "postcss-loader": "^3.0.0",
+    "postcss-preset-env": "^6.7.0",
+    "storybook": "^5.3.19",
+    "storybook-addon-specifications": "^2.1.5",
+    "style-loader": "^1.2.1",
+    "tsconfig-paths-webpack-plugin": "^3.2.0",
+    "typedoc": "^0.17.8",
+    "typedoc-webpack-plugin": "^1.1.4",
+    "typescript": "^3.9.6",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-shell-plugin": "^0.5.0"

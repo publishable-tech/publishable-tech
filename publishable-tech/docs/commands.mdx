@@ -1,0 +1,21 @@
+# Commands
+
+## What are commands and what do they do?
+
+What commands do: refer to index.js/COMMANDS
+
+## Add a command / mode
+
+- add to index.js/COMMANDS
+- add a matcher to index.js/@ref commandswitch
+- add the mode's implementation
+
+## NPM Start
+
+The command needs to be added to the `nodemon.json`, 
+
+for instance:
+
+```json
+"exec": "babel-node src/index.js start"
+```

@@ -1,0 +1,46 @@
+{
+  "name": "publishable-tech",
+  "version": "0.0.2",
+  "description": "",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/publishable-tech/publishable-tech.git"
+  },
+  "scripts": {
+    "typecheck": "tsc",
+    "start": "nodemon",
+    "test": "jest --config ./jest.config.js --coverage",
+    "test:watch": "npm run test -- --watch",
+    "build": "npx babel ./src --out-dir dist --extensions \".ts,.js,.tsx,.jsx\""
+  },
+  "keywords": [],
+  "author": "Dr. Frank Zickert",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@types/jest": "^26.0.7",
+    "@types/webpack-dev-server": "^3.11.0",
+    "babel-plugin-module-resolver": "^4.0.0",
+    "jest": "^26.1.0",
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "@babel/core": "^7.10.5",
+    "@babel/node": "^7.10.5",
+    "@babel/preset-react": "^7.10.4",
+    "@babel/register": "^7.10.5",
+    "babel-loader": "^8.1.0",
+    "file-loader": "^6.0.0",
+    "html-webpack-plugin": "^4.3.0",
+    "parse-comments": "^1.0.0",
+    "raw-loader": "^4.0.1",
+    "rimraf": "^3.0.2",
+    "ts-morph": "^7.1.3",
+    "tsutils": "^3.17.1",
+    "typescript": "^3.9.7",
+    "url-loader": "^4.1.0",
+    "webpack": "^4.43.0",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
