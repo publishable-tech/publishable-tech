@@ -32,7 +32,7 @@ type IStart = {
    * The (relative to the current working directory) path to a module that exports whatever
    * data the user wants to make available.
    */
-  dataModule: string;
+  dataModule?: string;
 };
 
 
@@ -40,6 +40,7 @@ type IStart = {
 
 /**
  * TODO: this relative path needs to be edited before published to NPM
+ * only during development
  */
 const aliasesResolver = require('../../publishable-app/aliases-resolver').default;
 
@@ -98,7 +99,8 @@ export default async function start (props: IStart) {
      * we use a relative path to the local version.
      * TODO: for production, use a dependency instead.
      */
-    entry: '../../publishable-app/dist/index.js',
+    //entry: '../../publishable-app/dist/index.js',
+    entry: './app/index.js',
     
     /**
      * TODO this is for the `build`-command
@@ -160,10 +162,10 @@ export default async function start (props: IStart) {
             {
               /**
                * This loader transforms the source code into documentation data
-               * we must NOT have the file-extension (`ts`) here, because it
+               * TODO: we must NOT have the file-extension (`ts`) here, because it
                * changes from `ts` in `src` to `js` in `dist`
                */
-              loader: path.resolve(__dirname, './loader/index'),
+              loader: path.resolve(__dirname, './loader/index.js'),
             },
             /**
              * The documentation consists of modules, too. We can load them with the 
@@ -210,19 +212,20 @@ export default async function start (props: IStart) {
                */
               rootMode: "upward",
               plugins: [
-                ['./dist/babel-wildcard', {
+                ['./dist/babel-wildcard',
+                {
                   'exts': ["js", "jsx", "ts", "tsx", "md", "mdx", ""],
                   /**
                    * The `alias`-paths are injected in the code of `publishable-app/src`
                    * They further need to be relative paths seen from the current working directory
                    * 
-                   * `"../publishable"` is the path from `./publishable-app to the `cwd`
+                   * `"../publishable-tech"` is the path from `./publishable-app to the `cwd`
                    * 
                    * TODO: the path may be different when published in NPM
                    */
                   alias: {
-                    __SOURCES__: path.join("../publishable", props.sourcesPath),
-                    __CONTENT__: path.join("../publishable", props.contentPath)
+                    __SOURCES__: path.join("../", props.sourcesPath),
+                    __CONTENT__: path.join("../", props.contentPath)
                   },
                   /**
                    * don't transform the name cases of the modules
@@ -258,7 +261,7 @@ export default async function start (props: IStart) {
         /**
          * the `__DATA__` replacement points to a module that exports the custom user data
          */
-        __DATA__: path.join("../../publishable", props.dataModule)
+        __DATA__: path.join("../../publishable-tech", props.dataModule ? props.dataModule : "")
       },
     },
 

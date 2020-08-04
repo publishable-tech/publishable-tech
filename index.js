@@ -36,7 +36,7 @@ const [, , ...args] = process.argv;
  * 
  * ```json
  * "scripts": {
- *  "publishable": "node ./node-modules/@publishable/index.js start"
+ *  "publishable": "node ./node-modules/publishable-tech/index.js start"
  * }
  * ```
  */
@@ -65,12 +65,15 @@ const COMMANDS = {
 ;(async () => {
   
   /**
+   * TODO: load the configuration from `publishable.config.js`
+   */ 
+  const config = require(path.join(process.cwd(), 'publishable.config.js'));
+
+  /**
    * Select the provided script
    */
   if (args.length > 0) {
-    /**
-     * TODO: load the configuration from the provided path
-     */
+    
 
     // @ref commandswitch
     /**
@@ -78,9 +81,9 @@ const COMMANDS = {
      */
     if (COMMANDS.START.localeCompare(args[0]) == 0) {
       start({
-        contentPath: "./example-data/content",
-        sourcesPath: "./example-data/src",
-        dataModule: "./example-data/src/app.js"
+        contentPath: config.contentPath, //"./example-data/content",
+        sourcesPath: config.sourcesPath, //"./example-data/src",
+        dataModule: config.dataModule, //"./example-data/src/app.js"
       });
     } else {
       console.log("Invalid command argument.")

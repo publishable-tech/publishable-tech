@@ -5,7 +5,8 @@ Then, Publishable is for you.
 
 Publishable lets you reference the actual source code and its comments in Markdown.
 
-*Note: This README
+*Note: this README was created with `Publishable`. You'll find the source file in the
+`example-data` folder in this repository ([here](https://raw.githubusercontent.com/publishable-tech/publishable-tech/master/example-data/content/index.md))
 
 ---
 
