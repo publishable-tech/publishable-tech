@@ -1,9 +1,12 @@
 # Publishable
 
-**Do you write technical articles about Javascript and Typescript?** Like this one.
+**Do you write technical articles about Javascript and Typescript?** Like this one*.
 Then, Publishable is for you.
 
 Publishable lets you reference the actual source code and its comments in Markdown.
+
+*Note: this README was created with `Publishable`. You'll find the source file in the
+`example-data` folder in this repository ([here](https://raw.githubusercontent.com/publishable-tech/publishable-tech/master/example-data/content/index.md))
 
 ---
 
@@ -81,7 +84,7 @@ Add **Publishable** as a `devDependency` to the project that contains the source
 code you'll want to write about.
 
 ```
-npm install --save-dev @publishable/tech
+npm install --save-dev publishable-tech
 
 ```
 
@@ -93,7 +96,7 @@ Add a `script` to your `package.json` in which you call this script in NodeJs an
 
 ```
 "scripts": {
- "publishable": "node ./node-modules/@publishable/tech/index.js start"
+ "publishable": "node ./node_modules/publishable-tech/index.js start"
 }
 
 ```

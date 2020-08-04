@@ -65,7 +65,7 @@ const COMMANDS = {
 ;(async () => {
   
   /**
-   * TODO: load the configuration from `publishable.config.js`
+   * load the configuration from `publishable.config.js`
    */ 
   const config = require(path.join(process.cwd(), 'publishable.config.js'));
 
@@ -74,7 +74,7 @@ const COMMANDS = {
    */
   if (args.length > 0) {
     
-
+    console.log(config)
     // @ref commandswitch
     /**
      * Check the command passed by the user

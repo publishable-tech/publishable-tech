@@ -1,8 +1,6 @@
 import _path from 'path';
 import _fs from 'fs';
 
-//console.log("LOADING MY OWN BABEL LOADER");
-
 export default function (babel) {
     const { types: t } = babel;
     

@@ -42,30 +42,29 @@ type IStart = {
  * TODO: this relative path needs to be edited before published to NPM
  * only during development
  */
-const aliasesResolver = require('../../publishable-app/aliases-resolver').default;
+//const aliasesResolver = require('../../publishable-app/aliases-resolver').default;
 
 /**
  * The main entry function of the `start`-mode.
  */
 export default async function start (props: IStart) {
 
-  
-    /**
-     * Before starting the dev-server, use babel to transform all source files into docs/*.ts files
-     * that expose the comments and the source code. Then, in the MDX, the user can import the
-     * comments and the code-strings
-     * 
-     * Then the webpack server can watch these files
-     */
-    // TODO: Insert here!
+  /**
+   * Before starting the dev-server, use babel to transform all source files into docs/*.ts files
+   * that expose the comments and the source code. Then, in the MDX, the user can import the
+   * comments and the code-strings
+   * 
+   * Then the webpack server can watch these files
+   */
+  // TODO: Insert here!
 
-    /**
-     * see {@link https://webpack.js.org/api/node/}
-     * see: {@link https://webpack.js.org/configuration/ | overview of Webpack configuration}
-     * see example: {@link https://github.com/webpack/webpack-dev-server/blob/master/examples/api/simple/server.js}
-     * 
-     * TODO: include the docs (mdx) and the sources (not of the app but the user's)
-     */
+  /**
+   * see {@link https://webpack.js.org/api/node/}
+   * see: {@link https://webpack.js.org/configuration/ | overview of Webpack configuration}
+   * see example: {@link https://github.com/webpack/webpack-dev-server/blob/master/examples/api/simple/server.js}
+   * 
+   * TODO: include the docs (mdx) and the sources (not of the app but the user's)
+   */
   const compiler = webpack({
     /**
      * mdx-js imports `fs` internally. But we don't need to work with it.
@@ -172,10 +171,37 @@ export default async function start (props: IStart) {
              * default `babel-loader`. It uses the base babel-config 
              * 
              * The sources that are part of the main code get overwritten
-             * TODO: rename the resulting sources
+             * TODO: rename the resulting sources?
+             * 
+             * TODO: this configuration should come from the user! because she
+             * knows the best how to compile her sources
              */
             { 
               loader: 'babel-loader', 
+              options: {
+                presets: [
+                  /**
+                   * Babel works based on plugins. You have plugins which convert arrow functions,
+                   * spread syntax etc. to the given environment. But to simplify things babel gathers
+                   * related plugins into  presets. The most popular preset is an “env” preset. It
+                   * contains all the features from the latest ECMAScript standard.
+                   * 
+                   * Along with the preset, you can pass some options. So let’s define that babel should transpile
+                   * code to node version 8. In order to do that we have to wrap the preset into an array
+                   * and as a second element pass the JSON object with `targets` property
+                   */
+                  [
+                      "@babel/preset-env", {
+                          targets: {"node": 8 }
+                      }
+                  ],
+                  /**
+                   * enable Babel to compile Typescript into Javascript
+                   */
+                  "@babel/preset-typescript",
+                ]
+              }
+              
             }
           ]
         },
@@ -184,19 +210,24 @@ export default async function start (props: IStart) {
          */
         {
           /**
-           * This is the normal compilation. I
+           * This is the normal compilation of the app, but not of the user sources
            */
           test: /\.(ts|js)x?$/,
           /**
            * Don't compile third party components
            */
-          exclude: /node_modules/,
+          //exclude: /node_modules/,
+          /**
+           * but when published, our sources are in `node_modules`, too ?!
+           */
+          include: path.resolve(__dirname), 
           use: [{
             /**
              * we use Babel to compile Typescript 
              */
             loader: 'babel-loader',
             options: {
+              
               /**
                * `rootMode: "upward"` enables us to load the Babel-config from bottom
                * up to these local options.
@@ -210,9 +241,14 @@ export default async function start (props: IStart) {
                * 
                * see: {@link https://babeljs.io/docs/en/config-files}
                */
-              rootMode: "upward",
+              //rootMode: "upward",
               plugins: [
-                ['./dist/babel-wildcard',
+                [
+                  //'./dist/babel-wildcard',
+                  /**
+                   * this is the path when published
+                   */
+                  './node_modules/publishable-tech/dist/babel-wildcard',
                 {
                   'exts': ["js", "jsx", "ts", "tsx", "md", "mdx", ""],
                   /**
@@ -222,10 +258,11 @@ export default async function start (props: IStart) {
                    * `"../publishable-tech"` is the path from `./publishable-app to the `cwd`
                    * 
                    * TODO: the path may be different when published in NPM
+                   * TODO: calculate path from cwd instead
                    */
                   alias: {
-                    __SOURCES__: path.join("../", props.sourcesPath),
-                    __CONTENT__: path.join("../", props.contentPath)
+                    __SOURCES__: path.join("../../../", props.sourcesPath),
+                    __CONTENT__: path.join("../../../", props.contentPath)
                   },
                   /**
                    * don't transform the name cases of the modules
@@ -234,7 +271,7 @@ export default async function start (props: IStart) {
                 }],
                 [
                   "module-resolver",
-                  aliasesResolver
+                  //aliasesResolver
                 ]
               ]
             }

@@ -6,7 +6,7 @@
  * code you'll want to write about.
  * 
  * ```bash
- * npm install --save-dev @publishable/tech
+ * npm install --save-dev publishable-tech
  * ```
  */
 describe("Install publishable", () => {
@@ -22,7 +22,7 @@ describe("Install publishable", () => {
  * 
  * ```json
  * "scripts": {
- *  "publishable": "node ./node-modules/@publishable/tech/index.js start"
+ *  "publishable": "node ./node_modules/publishable-tech/index.js start"
  * }
  * ```
  */
