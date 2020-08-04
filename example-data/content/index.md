@@ -166,23 +166,8 @@ any blogging platform.
 ---
 
 <!--
-## About Publishable And What's Next?
 
-
-In my free time, I write about Javascript and Typescript. But I find it cumbersome
-to keep my code and my article in sync. I developed Publishable to help me out.
-Ok, I confess: I literally hacked it together. First, I wanted to see whether
-I can implement such a system that merges source code and written text (check). Second,
-I want to see whether and how such as system aids my work writing technical articles.
-(we'll see). In fact, this post is not only the first about Publishable, but it is
-also the first post I wrote using Publishable.
-
-That said, Publishable is work in process.
-
-While I have a lot of features in mind, Publishable lacks most of them. For now.
-I'd be thankful for any feedback. Does this promise to be useful for you? Or is it
-completely useless? What features would you want Publishable to have before
-you would even consider trying it out? Whatever it is, please let me know.
+All this ithe rest is a HTML comment. It does not appear in MD
 
 **`inline`**
 
@@ -192,7 +177,7 @@ _ `inlineem`_
 
 ***
 
-> this is a blockquot
+> this is a blockquote
 over two lines
 
 | Tables   |      Are      |  Cool |
