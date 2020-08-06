@@ -30,6 +30,6 @@ declare global {
  * TODO: explain development mode. We should provide a link here rather than the full
  * explanation
  */
-export function isDevMode() {
+export function isDevMode(): boolean {
     return "development".localeCompare(process.env.__PUBLISHABLE_ENV__) == 0;
 }
