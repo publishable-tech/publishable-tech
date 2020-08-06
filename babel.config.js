@@ -6,7 +6,7 @@
  */
 
 /**
- * This Babel configuration applies to building the `publishable` package.
+ * This Babel configuration applies to building the `publishable-tech` package.
  */
 
 /**

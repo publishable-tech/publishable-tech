@@ -15,13 +15,27 @@
  *
  */
 
+/**
+ * The `dotenv`-documentation says:
+ * "As early as possible in your application, require and configure dotenv."
+ * 
+ * We use environment variables to tell the difference between running the script locally
+ * and when it is deployed. Because local paths are completely different.
+ */
+require('dotenv').config();
+//console.log("__PUBLISHABLE_DEV__: ",process.env.__PUBLISHABLE_DEV__);
+
 const path = require('path');
+
 
 /**
  * the entry point of the `start`-mode.
- * Does not work with the `dist`-version 
+ * During development, we use the source code from `src` because
+ * we don't want to build the project after each change.
+ * 
+ * When not in "dev"-mode, we use the compiled sources from the `dist`-folder
  */
-const start = require('./dist/start').default;
+const start = require(`./${"development".localeCompare(process.env.__PUBLISHABLE_ENV__) == 0 ? "src" : "dist"}/start`).default;
 
 // get the provided args
 const [, , ...args] = process.argv;
@@ -74,8 +88,6 @@ const COMMANDS = {
    */
   if (args.length > 0) {
     
-    console.log(config)
-    // @ref commandswitch
     /**
      * Check the command passed by the user
      */
@@ -89,7 +101,6 @@ const COMMANDS = {
       console.log("Invalid command argument.")
 
     }
-    // @endref commandswitch
     
   } else {
     /**

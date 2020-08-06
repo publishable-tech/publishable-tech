@@ -6,6 +6,7 @@
  */
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
+import { isDevMode } from './utils';
 
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -33,22 +34,25 @@ type IStart = {
    * data the user wants to make available.
    */
   dataModule?: string;
+
 };
 
 
 
-
 /**
- * TODO: this relative path needs to be edited before published to NPM
+ * this relative path needs to be edited before published to NPM
  * only during development
  */
-//const aliasesResolver = require('../../publishable-app/aliases-resolver').default;
+const aliasesResolver = isDevMode() ? require('../../publishable-app/aliases-resolver').default : undefined;
 
 /**
  * The main entry function of the `start`-mode.
  */
 export default async function start (props: IStart) {
 
+  if (isDevMode()) {
+    console.log("RUNNING IN DEV-MODE");
+  }
   /**
    * Before starting the dev-server, use babel to transform all source files into docs/*.ts files
    * that expose the comments and the source code. Then, in the MDX, the user can import the
@@ -86,7 +90,7 @@ export default async function start (props: IStart) {
      * the development mode builds a source map to discover bugs easily.
      * Not optimized for speed, though
      */
-    mode: 'development',
+    mode: isDevMode() ? 'development' : 'production',
         
     /**
      * we start with the pre-transpiled version of the `publishable-app`.
@@ -96,10 +100,9 @@ export default async function start (props: IStart) {
      */
     /**
      * we use a relative path to the local version.
-     * TODO: for production, use a dependency instead.
+     * for production, use a dependency instead.
      */
-    //entry: '../../publishable-app/dist/index.js',
-    entry: './app/index.js',
+    entry: isDevMode() ? '../../publishable-app/dist/index.js' : './app/index.js',
     
     /**
      * TODO this is for the `build`-command
@@ -163,8 +166,9 @@ export default async function start (props: IStart) {
                * This loader transforms the source code into documentation data
                * TODO: we must NOT have the file-extension (`ts`) here, because it
                * changes from `ts` in `src` to `js` in `dist`
+               * TODO: but without file-extension, it doesn't work
                */
-              loader: path.resolve(__dirname, './loader/index.js'),
+              loader: isDevMode() ? path.resolve(__dirname, `./loader/index.ts`) : path.resolve(__dirname, `./loader/index.js`),
             },
             /**
              * The documentation consists of modules, too. We can load them with the 
@@ -216,11 +220,11 @@ export default async function start (props: IStart) {
           /**
            * Don't compile third party components
            */
-          //exclude: /node_modules/,
+          exclude: isDevMode() ? /node_modules/ : undefined,
           /**
            * but when published, our sources are in `node_modules`, too ?!
            */
-          include: path.resolve(__dirname), 
+          include: isDevMode() ? undefined : path.resolve(__dirname), 
           use: [{
             /**
              * we use Babel to compile Typescript 
@@ -240,38 +244,46 @@ export default async function start (props: IStart) {
                * and will use its location as the "root" value.
                * 
                * see: {@link https://babeljs.io/docs/en/config-files}
+               * 
+               * TODO: if we wanted to use 
                */
-              //rootMode: "upward",
+              rootMode: "upward",
               plugins: [
                 [
-                  //'./dist/babel-wildcard',
-                  /**
-                   * this is the path when published
-                   */
-                  './node_modules/publishable-tech/dist/babel-wildcard',
-                {
-                  'exts': ["js", "jsx", "ts", "tsx", "md", "mdx", ""],
-                  /**
-                   * The `alias`-paths are injected in the code of `publishable-app/src`
-                   * They further need to be relative paths seen from the current working directory
-                   * 
-                   * `"../publishable-tech"` is the path from `./publishable-app to the `cwd`
-                   * 
-                   * TODO: the path may be different when published in NPM
-                   * TODO: calculate path from cwd instead
-                   */
-                  alias: {
-                    __SOURCES__: path.join("../../../", props.sourcesPath),
-                    __CONTENT__: path.join("../../../", props.contentPath)
-                  },
-                  /**
-                   * don't transform the name cases of the modules
-                   */
-                  'noModifyCase': true
-                }],
+                  //isDevMode() ?
+                    /**
+                     * this is the local path during development
+                     */
+                    path.join(__dirname, './babel-wildcard'),
+                    /**
+                     * this is the path when published
+                     */
+                    //: './node_modules/publishable-tech/dist/babel-wildcard',
+                  {
+                    'exts': ["js", "jsx", "ts", "tsx", "md", "mdx", ""],
+                    /**
+                     * The `alias`-paths are injected in the code of `publishable-app/src`
+                     * They further need to be relative paths seen from the current working directory
+                     * 
+                     * `"../publishable-tech"` is the path from `./publishable-app to the `cwd`
+                     * because we're running the script from `./publishable-tech`
+                     * 
+                     * the path may be different when published in NPM
+                     * TODO: calculate path from cwd instead
+                     */
+                    alias: {
+                      __SOURCES__: path.join(isDevMode() ? "../publishable-tech" : "../../../", props.sourcesPath),
+                      __CONTENT__: path.join(isDevMode() ? "../publishable-tech" : "../../../", props.contentPath)
+                    },
+                    /**
+                     * don't transform the name cases of the modules
+                     */
+                    'noModifyCase': true
+                  }
+                ],
                 [
                   "module-resolver",
-                  //aliasesResolver
+                  isDevMode() ? aliasesResolver : undefined
                 ]
               ]
             }
@@ -306,7 +318,7 @@ export default async function start (props: IStart) {
         new HtmlWebpackPlugin({
           filename: 'index.html',
           template: path.join(__dirname, './assets/layout.html'),
-          title: "My Page",
+          title: "Publishable",
         })
       ]
   });
