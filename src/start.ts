@@ -89,8 +89,10 @@ export default async function start (props: IStart) {
     /**
      * the development mode builds a source map to discover bugs easily.
      * Not optimized for speed, though
+     * When setting mode to production, we get an app size of, 2.5MB instead of 7.1MB,
+     * However, then we get a size warning when running `publishable`. 
      */
-    mode: isDevMode() ? 'development' : 'production',
+    mode:  'development', // isDevMode() ? 'development' : 'production',
         
     /**
      * we start with the pre-transpiled version of the `publishable-app`.
@@ -247,7 +249,7 @@ export default async function start (props: IStart) {
                * 
                * TODO: if we wanted to use 
                */
-              rootMode: "upward",
+              rootMode:  isDevMode() ? "upward" : undefined,
               plugins: [
                 [
                   //isDevMode() ?

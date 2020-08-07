@@ -1,7 +1,7 @@
 import _path from 'path';
 import _fs from 'fs';
 
-console.log("LOADING custom wildcard");
+//console.log("LOADING custom wildcard");
 
 export default function (babel) {
     const { types: t } = babel;
@@ -23,7 +23,7 @@ export default function (babel) {
                     path.node.source.value.indexOf(cur) >= 0 ? path.node.source.value.replace(cur, alias[cur]) : res
                 ), path.node.source.value);
 
-                console.log(path.node.source.value, src);
+                //console.log(path.node.source.value, src);
             
 
                 // Don't do anything if not a relative path

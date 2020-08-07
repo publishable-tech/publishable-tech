@@ -1,6 +1,6 @@
 {
   "name": "publishable-tech",
-  "version": "0.0.7",
+  "version": "0.0.8-alpha.4",
   "description": "",
   "main": "dist/index.js",
   "repository": {

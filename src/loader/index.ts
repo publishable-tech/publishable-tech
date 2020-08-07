@@ -3,6 +3,10 @@ const path = require('path')
 const Comments = require('parse-comments');
 
 /**
+ * TODO: specifying the root directory of the project as `sourcesPath` does not work!
+ */
+
+/**
  * For discovery and testing, see {@link https://ts-ast-viewer.com/#}
  */
 module.exports = function(content: any, map: any, meta: any) {
