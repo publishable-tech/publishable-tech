@@ -128,8 +128,13 @@ export default function (babel) {
                     try {
                         let r = _fs.readdirSync(dir);
                         for (var i = 0; i < r.length; i++) {
+                            //console.log(dir)
+                            //if (dir.indexOf("node_modules") !== -1) continue;
+                            
                             // Check extension is of one of the aboves
                             const {name, ext} = _path.parse(r[i]);
+                            if (name.startsWith(".")) continue;
+
                             if (exts.indexOf(ext.substring(1)) > -1 && filenameRegex.test(name)) {
                                 files.push(r[i]);
                                 isDirs.push(!ext);

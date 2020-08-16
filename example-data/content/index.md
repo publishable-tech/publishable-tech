@@ -8,11 +8,7 @@ Publishable lets you reference the actual source code and its comments in Markdo
 Do you write blog-posts about programming and software development?
 Great! It means you're sharing your knowledge with fellow developers.
 
-In your technical post, you'll want to include source code snippets.
-And of course, you want your source code to work. But when you co-develop
-your post and your code, your code is not yet finished when you start
-writing it. And when the source code changes, the struggle of keeping
-the snippets up-to-date starts.
+In your technical post, you'll want to include source code snippets. And of course, you want your source code to work. But when you co-develop your post and your code, your code is not yet finished when you start writing it. And when the source code changes, the struggle of keeping the snippets up-to-date starts.
 
 But there's a way out.
 

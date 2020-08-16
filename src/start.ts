@@ -295,7 +295,8 @@ export default async function start (props: IStart) {
         {
           test: /\.(png|svg|jpg|gif)$/,
           use: [{ loader: 'url-loader', options: {limit: 8192} }]
-        },     
+        },   
+        
       ]
     },
 
@@ -303,7 +304,7 @@ export default async function start (props: IStart) {
      * These are the extenstions we resolve
      */
     resolve: {
-      extensions: [".js", ".jsx", ".tsx", ".ts", ".md", ".mdx"],
+      extensions: [".js", ".jsx", ".tsx", ".ts"],
       /**
        * Aliases don't work with the wildcard. Thus, we include the commented source code
        * and the content through separate loaders.
